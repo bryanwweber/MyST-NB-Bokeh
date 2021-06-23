@@ -4,4 +4,25 @@ build-backend = "setuptools.build_meta"
 
 [tool.isort]
 profile = "black"
-src_paths = ["myst_nb", "tests"]
+src_paths = ["src", "tests"]
+
+[tool.mypy]
+show_error_codes = true
+check_untyped_defs = true
+strict_equality = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_unreachable = true
+files = "src"
+
+[[tool.mypy.overrides]]
+module = [
+    "bokeh.embed",
+    "bokeh.resources",
+    "IPython.display",
+    "myst_nb.nodes",
+    "myst_nb.render_outputs",
+    "docutils.nodes",
+    "nbformat",
+]
+ignore_missing_imports = true

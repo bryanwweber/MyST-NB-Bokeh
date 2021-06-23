@@ -6,35 +6,41 @@ __version__ = "0.1.0"
 
 import json
 import logging
-from typing import Optional, cast, TYPE_CHECKING
 from textwrap import dedent
+from typing import TYPE_CHECKING, Optional, cast
 
 from bokeh.embed import components, json_item
 from bokeh.resources import CDN
 from docutils import nodes
-from IPython.display import HTML, Javascript, display as ipy_display
-from myst_nb import CellOutputBundleNode
+from IPython.display import HTML, Javascript
+from IPython.display import display as ipy_display
+from myst_nb.nodes import CellOutputBundleNode
 from myst_nb.render_outputs import CellOutputRenderer
-from sphinx.application import Sphinx
 from sphinx.domains import Domain
 
 if TYPE_CHECKING:
-    from typing import Dict, Any
-    from sphinx.environment import BuildEnvironment
+    from typing import Any, Callable
+
     from docutils.nodes import Node
     from nbformat import NotebookNode
+    from sphinx.application import Sphinx
+    from sphinx.environment import BuildEnvironment
 
 LOGGER = logging.getLogger(__name__)
 JB_BOKEH_MIMETYPE = "application/jupyter-book-bokeh-json"
 GLUE_PREFIX = "application/papermill.record/"
 
 
-def setup(app: Sphinx):
+def setup(app: "Sphinx"):
     app.add_domain(BokehGlueDomain)
 
     # Load bokeh
     def install_bokeh(
-        app: Sphinx, pagename: str, templatename: str, context: "Dict", event_arg: "Any"
+        app: "Sphinx",
+        pagename: str,
+        templatename: str,
+        context: dict,
+        event_arg: "Any",
     ) -> None:
         if app.builder.format != "html":
             return
@@ -46,7 +52,9 @@ def setup(app: Sphinx):
             for js_file in CDN.js_files:
                 app.add_js_file(js_file)
             for js_raw in CDN.js_raw:
-                app.add_js_file(None, body=js_raw, type="text/javascript")
+                # Sphinx actually allows None as the first argument to allow a string as the body
+                # of the script element.
+                app.add_js_file(None, body=js_raw, type="text/javascript")  # type: ignore
 
     app.connect("html-page-context", install_bokeh)
 
@@ -57,7 +65,7 @@ class BokehGlueDomain(Domain):
     name = "bokeh_glue"
     label = "BokehGlue"
     # data version, bump this when the format of self.data changes
-    data_version = 0.1
+    data_version = 1
     # data value for a fresh environment
     # - has_bokeh is the mapping of docnames to a boolean whether or not it has Bokeh
     initial_data: dict[str, dict[str, bool]] = {
@@ -112,6 +120,8 @@ def glue_bokeh(name, variable, display=False):
 
 
 class BokehOutputRenderer(CellOutputRenderer):
+    _render_map: dict[str, "Callable[[NotebookNode, int], list[nodes.Node]]"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._render_map[JB_BOKEH_MIMETYPE] = self.render_bokeh

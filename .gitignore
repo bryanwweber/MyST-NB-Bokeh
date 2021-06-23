@@ -101,6 +101,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+out/
 
 # IDE settings
 .vscode/
