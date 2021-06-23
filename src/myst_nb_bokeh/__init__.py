@@ -60,7 +60,7 @@ def setup(app: "Sphinx"):
 
 
 class BokehGlueDomain(Domain):
-    """A sphinx domain for handling Bokeh data."""
+    """A Sphinx domain for handling Bokeh data."""
 
     name = "bokeh_glue"
     label = "BokehGlue"
@@ -85,23 +85,17 @@ class BokehGlueDomain(Domain):
             """Whether or not Bokeh JSON is in the output."""
             if not isinstance(node, CellOutputBundleNode):
                 return False
-            for output in node.outputs:
-                mime_prefix = (
-                    output.get("metadata", {}).get("scrapbook", {}).get("mime_prefix")
-                )
-                if mime_prefix is None:
-                    return False
-                for k in output.get("data", {}).keys():
-                    if k.replace(mime_prefix, "") == JB_BOKEH_MIMETYPE:
-                        return True
-            return False
+            return any(
+                output.get("metadata", {}).get("scrapbook", {}).get("has_bokeh", False)
+                for output in node.outputs
+            )
 
         self.data["has_bokeh"][docname] = any(document.traverse(bokeh_in_output))
 
 
 def glue_bokeh(name, variable, display=False):
     mime_prefix = "" if display else GLUE_PREFIX
-    metadata = {"scrapbook": dict(name=name, mime_prefix=mime_prefix)}
+    metadata = {"scrapbook": dict(name=name, mime_prefix=mime_prefix, has_bokeh=True)}
     ipy_display(
         {
             mime_prefix
