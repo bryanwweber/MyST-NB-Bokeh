@@ -3,10 +3,8 @@
 
 exclude: >
     (?x)^(
-      \.vscode/settings\.json|
-      tests/commonmark/commonmark\.json|
-      .*\.xml|
-      tests/.*\.txt
+      setup\.py|
+      docs/conf\.py
     )$
 
 repos:

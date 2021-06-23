@@ -13,7 +13,6 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-from pathlib import Path
 
 # -- Project information -----------------------------------------------------
 
@@ -30,15 +29,32 @@ release = "0.1.0"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["myst_nb_bokeh"]
+extensions = [
+    "myst_nb_bokeh",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
+]
+
+autodoc_typehints = "description"
+autodoc_default_options = {
+    "members": True,
+    "show-inheritance": True,
+    "special-members": "__init__",
+    "undoc-members": True,
+}
+autodoc_mock_imports = ["sphinx"]
 nb_render_plugin = "bokeh"
 myst_enable_extensions = [
     "colon_fence",
 ]
 
-jupyter_cache = "_build/jupyter_execute"
-Path("_build/jupyter_execute").mkdir(exist_ok=True, parents=True)
-jupyter_execute_notebooks = "cache"
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "sphinx": ("https://www.sphinx-doc.org/en/3.x", None),
+    "myst_nb": ("https://myst-nb.readthedocs.io/en/latest/", None),
+    "nbformat": ("https://nbformat.readthedocs.io/en/latest", None),
+}
+
 nb_render_priority = {
     "html": (
         "application/jupyter-book-bokeh-json",
@@ -68,7 +84,17 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "jupyter_execute"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
+
+html_title = ""
+html_theme = "sphinx_book_theme"
+html_theme_options = {
+    "github_url": "https://github.com/bryanwweber/myst_nb_bokeh",
+    "repository_url": "https://github.com/bryanwweber/myst_nb_bokeh",
+    "repository_branch": "main",
+    "use_edit_page_button": True,
+    "path_to_docs": "docs/",
+    "show_navbar_depth": 2,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
