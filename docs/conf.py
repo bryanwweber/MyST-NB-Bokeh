@@ -15,7 +15,6 @@
 # sys.path.insert(0, os.path.abspath('.'))
 from pathlib import Path
 
-
 # -- Project information -----------------------------------------------------
 
 project = "MyST-NB-Bokeh"
@@ -31,7 +30,7 @@ release = "0.1.0"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["myst_nb", "myst_nb_bokeh"]
+extensions = ["myst_nb_bokeh"]
 nb_render_plugin = "bokeh"
 myst_enable_extensions = [
     "colon_fence",

@@ -31,7 +31,8 @@ JB_BOKEH_MIMETYPE = "application/jupyter-book-bokeh-json"
 GLUE_PREFIX = "application/papermill.record/"
 
 
-def setup(app: "Sphinx"):
+def setup(app: "Sphinx") -> dict[str, str]:
+    app.setup_extension("myst_nb")
     app.add_domain(BokehGlueDomain)
 
     # Load bokeh
@@ -57,6 +58,7 @@ def setup(app: "Sphinx"):
                 app.add_js_file(None, body=js_raw, type="text/javascript")  # type: ignore
 
     app.connect("html-page-context", install_bokeh)
+    return {"version": __version__}
 
 
 class BokehGlueDomain(Domain):
