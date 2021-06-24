@@ -8,6 +8,8 @@ python:
   version: 3.8
   install:
   - method: pip
+    path: https://github.com/bryanwweber/MyST-NB/archive/refs/heads/fix_cell_output_renderer.zip
+  - method: pip
     path: .
     extra_requirements:
     - docs
