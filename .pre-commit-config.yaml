@@ -8,13 +8,20 @@ exclude: >
     )$
 
 repos:
-
   - repo: git://github.com/pre-commit/pre-commit-hooks
     rev: v3.4.0
     hooks:
     - id: check-yaml
+    - id: check-toml
     - id: end-of-file-fixer
     - id: trailing-whitespace
+
+  - repo: https://github.com/mgedmin/check-manifest
+    rev: "0.46"
+    hooks:
+    - id: check-manifest
+      args: [--no-build-isolation]
+      additional_dependencies: [setuptools>=46.4.0]
 
   - repo: https://github.com/timothycrosley/isort
     rev: 5.8.0
