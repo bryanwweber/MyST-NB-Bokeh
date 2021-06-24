@@ -26,8 +26,8 @@ if TYPE_CHECKING:
 
     from nbformat import NotebookNode
     from sphinx.application import Sphinx
-    from sphinx.environment import BuildEnvironment
     from sphinx.config import Config
+    from sphinx.environment import BuildEnvironment
 
 LOGGER = getLogger(__name__)
 
@@ -140,16 +140,25 @@ class BokehGlueDomain(Domain):
     }
 
     def has_bokeh(self, docname: Optional[str] = None) -> bool:
-        """Return whether or not this page requires BokehJS."""
+        """Return whether or not this page requires BokehJS.
+
+        :param docname: The name of the document being processed.
+        :return: Boolean whether or not the page requires BokehJS.
+        """
         if docname:
             return self.data["has_bokeh"].get(docname, False)
         else:
             return any(self.data["has_bokeh"].values())
 
     def process_doc(
-        self, env: "BuildEnvironment", docname: str, document: nodes.document
+        self, env: BuildEnvironment, docname: str, document: nodes.document
     ) -> None:
-        """Set internal data for whether or not this page requires BokehJS."""
+        """Set internal data for whether or not this page requires BokehJS.
+
+        :param env: The Sphinx build environment instance.
+        :param docname: The name of the page being processed.
+        :param document: The doctree of the current page.
+        """
 
         def bokeh_in_output(node: nodes.Node) -> bool:
             """Whether or not Bokeh JSON is in the output."""
