@@ -27,3 +27,8 @@ module = [
     "nbformat",
 ]
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+markers = [
+    "sphinx_params",
+]
