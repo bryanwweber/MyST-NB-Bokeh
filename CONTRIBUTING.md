@@ -1,32 +1,28 @@
-# Contribute to MyST-NB
+# Contribute to MyST-NB-Bokeh
 
 [![Github-CI][github-ci]][github-link]
-[![Coverage Status][codecov-badge]][codecov-link]
-[![Documentation Status][rtd-badge]][rtd-link]
 [![Code style: black][black-badge]][black-link]
 
-We welcome all contributions!
-See the [EBP Contributing Guide](https://executablebooks.org/en/latest/contributing.html) for general details, and below for guidance specific to MyST-NB.
+We welcome all contributions! Although this project is not affiliated with the [Executable Books Project](https://executablebooks.org), you can see the [EBP Contributing Guide](https://executablebooks.org/en/latest/contributing.html) for general details, and below for guidance specific to MyST-NB-Bokeh.
 
 ## Installation
 
-To install `MyST-NB-bokeh` for package development:
+To install `MyST-NB-Bokeh` for package development:
 
 ```bash
-git clone https://github.com/bryanwweber/MyST-NB-bokeh
-cd MyST-NB-bokeh
-git checkout main
-python -m pip install -e .[code_style,testing]
+git clone https://github.com/bryanwweber/MyST-NB-Bokeh
+cd MyST-NB-Bokeh
+python -m pip install -e .[code_style,testing,docs]
 ```
 
 ## Code Style
 
 Code style is tested using [flake8](http://flake8.pycqa.org), with the configuration set in `setup.cfg`, and code formatted with [black](https://github.com/ambv/black).
 
-Installing with `myst-nb[code_style]` makes the [pre-commit](https://pre-commit.com/) package available, which will ensure this style is met before commits are submitted, by reformatting the code and testing for lint errors. It can be setup by:
+Installing with `myst-nb-bokeh[code_style]` makes the [pre-commit](https://pre-commit.com/) package available, which will ensure this style is met before commits are submitted, by reformatting the code and testing for lint errors. It can be setup by:
 
 ```shell
->> cd MyST-NB-bokeh
+>> cd MyST-NB-Bokeh
 >> pre-commit install
 ```
 
@@ -43,33 +39,11 @@ All functions and class methods should be annotated with types and include a doc
 
 ## Testing
 
-For code tests, MyST-NB-bokeh uses [pytest](https://docs.pytest.org):
+For code tests, MyST-NB-Bokeh uses [pytest](https://docs.pytest.org):
 
 ```shell
 >> cd MyST-NB-bokeh
 >> pytest
-```
-
-You can also use [tox](https://tox.readthedocs.io), to run the tests in multiple isolated environments (see the `tox.ini` file for available test environments):
-
-```shell
->> cd MyST-NB-bokeh
->> tox
-```
-
-For documentation build tests:
-
-```shell
->> cd MyST-NB-bokeh
->> tox
-```
-
-or
-
-```shell
->> cd MyST-NB-bokeh/docs
->> make clean
->> make html-strict
 ```
 
 ## Unit Testing
@@ -84,10 +58,10 @@ To run tests along with coverage:
 pytest -v --cov=myst_nb
 ```
 
-To run tests along with generation of an html coverage report:
+To run tests along with generation of an HTML coverage report:
 
 ```shell
-pytest -v --cov=myst_nb --cov-report=html
+pytest -v --cov=myst_nb_bokeh --cov-report=html
 ```
 
 ### Test File and Directory Naming Conventions
@@ -104,11 +78,7 @@ If using [pytest-regression](https://pytest-regressions.readthedocs.io/en/latest
 
 [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) is used to generate code coverage report. Make sure that your test cases cover most of the code written by you.
 
-[github-ci]: https://github.com/bryanwweber/MyST-NB-bokeh/workflows/continuous-integration/badge.svg?branch=master
-[github-link]: https://github.com/bryanwweber/MyST-NB
-[codecov-badge]: https://codecov.io/gh/bryanwweber/MyST-NB/branch/master/graph/badge.svg
-[codecov-link]: https://codecov.io/gh/bryanwweber/MyST-NB
-[rtd-badge]: https://readthedocs.org/projects/myst-nb/badge/?version=latest
-[rtd-link]: https://myst-nb.readthedocs.io/en/latest/?badge=latest
+[github-ci]: https://github.com/bryanwweber/MyST-NB-Bokeh/workflows/continuous-integration/badge.svg?branch=main
+[github-link]: https://github.com/bryanwweber/MyST-NB-Bokeh
 [black-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
 [black-link]: https://github.com/ambv/black

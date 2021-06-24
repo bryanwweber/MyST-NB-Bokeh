@@ -42,7 +42,6 @@ autodoc_default_options = {
     "special-members": "__init__",
     "undoc-members": True,
 }
-autodoc_mock_imports = ["sphinx"]
 nb_render_plugin = "bokeh"
 myst_enable_extensions = [
     "colon_fence",
