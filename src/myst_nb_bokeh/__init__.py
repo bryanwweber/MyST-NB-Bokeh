@@ -49,6 +49,24 @@ def setup(app: Sphinx) -> dict[str, str]:
     app.setup_extension("myst_nb")
     app.add_domain(BokehGlueDomain)
 
+    nb_render_priority = {
+        "html": (
+            "application/jupyter-book-bokeh-json",
+            "application/vnd.jupyter.widget-view+json",
+            "application/javascript",
+            "text/html",
+            "image/svg+xml",
+            "image/png",
+            "image/jpeg",
+            "text/markdown",
+            "text/latex",
+            "text/plain",
+        )
+    }
+    # Sphinx config is a dictionary with keys accessible as attributes
+    # Mypy just doesn't understand :-(
+    app.config.nb_render_priority = nb_render_priority  # type: ignore
+
     # Load bokeh
     def install_bokeh(
         app: Sphinx,

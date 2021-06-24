@@ -54,21 +54,6 @@ intersphinx_mapping = {
     "nbformat": ("https://nbformat.readthedocs.io/en/latest", None),
 }
 
-nb_render_priority = {
-    "html": (
-        "application/jupyter-book-bokeh-json",
-        "application/vnd.jupyter.widget-view+json",
-        "application/javascript",
-        "text/html",
-        "image/svg+xml",
-        "image/png",
-        "image/jpeg",
-        "text/markdown",
-        "text/latex",
-        "text/plain",
-    )
-}
-
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
