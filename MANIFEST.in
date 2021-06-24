@@ -4,7 +4,7 @@ exclude tests
 recursive-exclude tests *
 
 exclude .pre-commit-config.yaml
-exclude .readthedocs.yml
+exclude .readthedocs.yaml
 
 include LICENSE
 include CHANGELOG.md
