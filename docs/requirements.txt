@@ -1,0 +1,1 @@
+https://github.com/bryanwweber/MyST-NB/archive/refs/heads/fix_cell_output_renderer.zip

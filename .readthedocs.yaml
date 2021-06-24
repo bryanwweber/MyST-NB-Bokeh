@@ -7,8 +7,7 @@ sphinx:
 python:
   version: 3.8
   install:
-  - method: pip
-    path: https://github.com/bryanwweber/MyST-NB/archive/refs/heads/fix_cell_output_renderer.zip
+  - requirements: docs/requirements.txt
   - method: pip
     path: .
     extra_requirements:
