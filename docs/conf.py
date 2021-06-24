@@ -42,7 +42,6 @@ autodoc_default_options = {
     "special-members": "__init__",
     "undoc-members": True,
 }
-nb_render_plugin = "bokeh"
 myst_enable_extensions = [
     "colon_fence",
 ]
@@ -62,19 +61,20 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "jupyter_execute"]
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
 
-html_title = ""
+html_title = "MyST-NB Bokeh"
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "github_url": "https://github.com/bryanwweber/myst_nb_bokeh",
     "repository_url": "https://github.com/bryanwweber/myst_nb_bokeh",
     "repository_branch": "main",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "home_page_in_toc": True,
     "use_edit_page_button": True,
     "path_to_docs": "docs/",
     "show_navbar_depth": 2,

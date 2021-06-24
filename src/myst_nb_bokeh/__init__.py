@@ -7,7 +7,6 @@ __email__ = "bryan.w.weber@gmail.com"
 __version__ = "0.2.0"
 
 import json
-import logging
 from textwrap import dedent
 from typing import TYPE_CHECKING, Optional, cast
 
@@ -18,18 +17,19 @@ from IPython.display import HTML, Javascript
 from IPython.display import display as ipy_display
 from myst_nb.nb_glue import GLUE_PREFIX as MYST_NB_GLUE_PREFIX
 from myst_nb.nodes import CellOutputBundleNode
-from myst_nb.render_outputs import CellOutputRenderer
+from myst_nb.render_outputs import CellOutputRenderer, get_default_render_priority
 from sphinx.domains import Domain
+from sphinx.util.logging import getLogger
 
 if TYPE_CHECKING:
-    from typing import Any, Callable
+    from typing import Callable
 
-    from docutils.nodes import Node
     from nbformat import NotebookNode
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
+    from sphinx.config import Config
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = getLogger(__name__)
 
 #: The mimetype that we use for JSON output from Bokeh.
 #: This is a custom mimetype to avoid conflicting with any actual mimetypes.
@@ -47,50 +47,81 @@ def setup(app: Sphinx) -> dict[str, str]:
     :return: A dictionary containing the version of this extension.
     """
     app.setup_extension("myst_nb")
+    app.connect("config-inited", add_our_configuration)
     app.add_domain(BokehGlueDomain)
-
-    nb_render_priority = {
-        "html": (
-            "application/jupyter-book-bokeh-json",
-            "application/vnd.jupyter.widget-view+json",
-            "application/javascript",
-            "text/html",
-            "image/svg+xml",
-            "image/png",
-            "image/jpeg",
-            "text/markdown",
-            "text/latex",
-            "text/plain",
-        )
-    }
-    # Sphinx config is a dictionary with keys accessible as attributes
-    # Mypy just doesn't understand :-(
-    app.config.nb_render_priority = nb_render_priority  # type: ignore
-
-    # Load bokeh
-    def install_bokeh(
-        app: Sphinx,
-        pagename: str,
-        templatename: str,
-        context: dict,
-        event_arg: Any,
-    ) -> None:
-        if app.builder.format != "html":
-            return
-
-        domain = cast(BokehGlueDomain, app.env.get_domain("bokeh_glue"))
-        if domain.has_bokeh(pagename):
-            from bokeh.resources import CDN
-
-            for js_file in CDN.js_files:
-                app.add_js_file(js_file)
-            for js_raw in CDN.js_raw:
-                # Sphinx actually allows None as the first argument to allow a string as the body
-                # of the script element.
-                app.add_js_file(None, body=js_raw, type="text/javascript")  # type: ignore
-
     app.connect("html-page-context", install_bokeh)
     return {"version": __version__}
+
+
+def install_bokeh(
+    app: Sphinx,
+    pagename: str,
+    templatename: str,
+    context: dict,
+    doctree: Optional[nodes.Node],
+) -> None:  # noqa: E501
+    """Add BokehJS files to the page, if the page has Bokeh plots.
+
+    Designed to be connected to the ``'html-page-context'``
+    `Sphinx event <https://www.sphinx-doc.org/en/master/extdev/appapi.html#event-html-page-context>`__.
+    If the builder format is not an HTML file, this function does nothing. The function signature
+    is determined by the Sphinx API.
+
+    :param app: The Sphinx application instance.
+    :param pagename: The page being processed.
+    :param templatename: The template in use.
+    :param context: The context dictionary for the template.
+    :param doctree: The doctree being processed.
+    """  # noqa: E501
+    if app.builder.format != "html":
+        return
+
+    domain = cast(BokehGlueDomain, app.env.get_domain("bokeh_glue"))
+    if domain.has_bokeh(pagename):
+        from bokeh.resources import CDN
+
+        for js_file in CDN.js_files:
+            app.add_js_file(js_file)
+        for js_raw in CDN.js_raw:
+            # Sphinx actually allows None as the first argument to allow a string as the body
+            # of the script element. For some reason, the function is not typed this way.
+            app.add_js_file(None, body=js_raw, type="text/javascript")  # type: ignore
+
+
+def add_our_configuration(app: Sphinx, config: Config) -> None:
+    """Add the configuration for MyST-NB to the Sphinx configuration.
+
+    Designed to be connected to the ``'config-inited'``
+    `Sphinx event <https://www.sphinx-doc.org/en/master/extdev/appapi.html#event-config-inited>`__
+    to ensure that all configuration sources have been read. The function signature is determined
+    by the Sphinx API.
+
+    :param app: The Sphinx application instance.
+    :param config: The Sphinx configuration instance.
+    """
+    if app.config.nb_render_priority and "html" in app.config.nb_render_priority:
+        html_render_priority = list(app.config.nb_render_priority.get("html"))
+    else:
+        html_render_priority = list(get_default_render_priority("html"))
+
+    if JB_BOKEH_MIMETYPE not in html_render_priority:
+        if app.config.nb_render_priority and "html" in app.config.nb_render_priority:
+            LOGGER.warning(
+                "'nb_render_priority' has been configured and does not contain the MyST-NB "
+                "Bokeh-specific mimetype. We will attempt to insert the MyST-NB Bokeh "
+                "mimetype at the top of the 'html' rendering priority."
+            )
+        app.config["nb_render_priority"] = {
+            "html": [JB_BOKEH_MIMETYPE] + html_render_priority
+        }
+
+    if app.config.nb_render_plugin not in ("default", "bokeh"):
+        LOGGER.warning(
+            "'nb_render_plugin' has been configured, perhaps in your conf.py. Not "
+            "changing the value at this time."
+        )
+    else:
+        app.config["nb_render_plugin"] = "bokeh"
 
 
 class BokehGlueDomain(Domain):
@@ -120,7 +151,7 @@ class BokehGlueDomain(Domain):
     ) -> None:
         """Set internal data for whether or not this page requires BokehJS."""
 
-        def bokeh_in_output(node: "Node") -> bool:
+        def bokeh_in_output(node: nodes.Node) -> bool:
             """Whether or not Bokeh JSON is in the output."""
             if not isinstance(node, CellOutputBundleNode):
                 return False
