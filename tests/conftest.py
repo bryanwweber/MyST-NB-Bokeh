@@ -2,7 +2,9 @@
 
 import json
 import os
+import re
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pytest
 from lxml import etree
@@ -114,10 +116,14 @@ def sphinx_run(sphinx_params, make_app, tempdir):
 class BokehHTMLChecker(LHTMLOutputChecker):
     """Check the HTML of a Notebook with Bokeh."""
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.found_bokehjs = False
+
     def compare_docs(self, want, got):
         """Compare two HTML documents.
 
-        Similar to lxml.doctestchecker.LHTMLOutputChecker, but raises AssertionErrors with more
+        Similar to lxml.doctestcompare.LHTMLOutputChecker, but raises AssertionErrors with more
         context, instead of returning a Boolean value.
         """
         if not self.tag_compare(want.tag, got.tag):
@@ -140,7 +146,10 @@ class BokehHTMLChecker(LHTMLOutputChecker):
             got_keys = sorted(got.attrib.keys())
             assert want_keys == got_keys
             for key in want_keys:
-                if not self.text_compare(want.attrib[key], got.attrib[key], False):
+                if key in ("src", "href") and "https" in want.attrib[key]:
+                    if self.url_compare(want.attrib[key], got.attrib[key]):
+                        self.found_bokehjs = True
+                elif not self.text_compare(want.attrib[key], got.attrib[key], False):
                     raise AssertionError(
                         f"Expected value: {want.attrib[key]}; Obtained value: {got.attrib[key]}"
                     )
@@ -158,6 +167,40 @@ class BokehHTMLChecker(LHTMLOutputChecker):
                 if not got_children and want_first.tail == "...":
                     break
 
+    def url_compare(self, want, got):
+        """Compare URLs from script and link tags.
+
+        Raises AssertionErrors if there are differences in the parsed URL.
+        Returns True if the URL has 'bokeh' in it, otherwise returns False.
+        """
+        want = urlparse(want)
+        got = urlparse(got)
+        for attr in ("scheme", "netloc", "query", "params", "fragment"):
+            if getattr(want, attr) != getattr(got, attr):
+                raise AssertionError(
+                    f"Expected value: {getattr(want, attr)}; Obtained value: {getattr(got, attr)}"
+                )
+        if "bokeh" in got.netloc:
+            # Compare path portions separately to allow different versions to compare equal.
+            url_re = re.compile(r"(/bokeh/release/bokeh-[\w-]*)\d\.\d\.\d(\.min\.js)")
+            want_path = url_re.match(want.path)
+            got_path = url_re.match(got.path)
+            if want_path is None:
+                raise AssertionError(f"Expected output did not match: {want.path}")
+            if got_path is None:
+                raise AssertionError(f"Obtained output did not match: {got.path}")
+            if want_path.groups() != got_path.groups():
+                raise AssertionError(
+                    f"Expected value: {want.path}; Obtained value: {got.path}"
+                )
+            return True
+        else:
+            if want.path != got.path:
+                raise AssertionError(
+                    f"Expected value: {want.path}; Obtained value: {got.path}"
+                )
+            return False
+
 
 @pytest.fixture()
 def check_bokeh():
@@ -173,6 +216,8 @@ def check_bokeh():
         expected_doc = html_fromstring(expected_filename.read_text())
         c = BokehHTMLChecker()
         result = c.compare_docs(expected_doc, obtained_doc)
+        if not c.found_bokehjs:
+            raise AssertionError("Did not find BokehJS scripts in the page head.")
         if not result and result is not None:
             diff = c.collect_diff(expected_doc, obtained_doc, True, 2)
             raise AssertionError(diff)

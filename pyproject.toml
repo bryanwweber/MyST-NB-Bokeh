@@ -32,3 +32,8 @@ ignore_missing_imports = true
 markers = [
     "sphinx_params",
 ]
+filterwarnings = [
+    "ignore:'environmentfilter' is renamed",
+    "ignore:'contextfilter' is renamed",
+    "ignore:'contextfunction' is renamed",
+]
