@@ -24,7 +24,7 @@ repos:
       additional_dependencies: [setuptools>=46.4.0]
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.9.2
+    rev: 5.9.3
     hooks:
     - id: isort
 
