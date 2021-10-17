@@ -207,7 +207,7 @@ def check_bokeh():
     """Check Bokeh JSON output, which is in non-deterministic order."""
 
     def _check_bokeh(obtained_filename, expected_filename):
-        _html_parser = etree.HTMLParser(recover=False, remove_blank_text=True)
+        _html_parser = etree.HTMLParser(recover=True, remove_blank_text=True)
 
         def html_fromstring(html):
             return etree.fromstring(html, _html_parser)
