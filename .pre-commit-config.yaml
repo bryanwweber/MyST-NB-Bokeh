@@ -44,7 +44,7 @@ repos:
     hooks:
     - id: mypy
       args: ["--install-types", "--non-interactive"]
-      additional_dependencies: ["sphinx>=3,<4", "docutils>=0.14,<0.16"]
+      additional_dependencies: ["sphinx>=4,<5", "docutils>=0.14,<0.18"]
       exclude: >
         (?x)^(
           tests/.*\.py

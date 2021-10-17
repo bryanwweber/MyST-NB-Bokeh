@@ -73,10 +73,14 @@ def install_bokeh(
     :param context: The context dictionary for the template.
     :param doctree: The doctree being processed.
     """  # noqa: E501
-    if app.builder.format != "html":
+    # According to mypy, the HTML builder does not have a
+    # format attribute. Probably mistyped in Sphinx
+    if app.builder.format != "html":  # type: ignore
         return
 
-    domain = cast(BokehGlueDomain, app.env.get_domain("bokeh_glue"))
+    # According to mypy, the BuilderEnvironment does not have
+    # a get_domain attribute. Probably mistyped in Sphinx
+    domain = cast(BokehGlueDomain, app.env.get_domain("bokeh_glue"))  # type: ignore
     if domain.has_bokeh(pagename):
         from bokeh.resources import CDN
 
