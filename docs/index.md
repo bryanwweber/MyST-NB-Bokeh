@@ -11,7 +11,7 @@ That's where this extension comes in 😀
 MyST-NB-Bokeh can currently be installed only with `pip`. It relies on an unreleased version of MyST-NB, due to a bug that is fixed in [MyST-NB pull request #337](https://github.com/executablebooks/MyST-NB/pull/337), so you have to install MyST-NB _first_ before MyST-NB-Bokeh:
 
 ```shell
-python -m pip install https://github.com/bryanwweber/MyST-NB/archive/refs/heads/fix_cell_output_renderer.zip
+python -m pip install https://github.com/executablebooks/MyST-NB/archive/refs/heads/master.zip
 python -m pip install myst-nb-bokeh
 ```
 
