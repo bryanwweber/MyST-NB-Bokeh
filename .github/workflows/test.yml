@@ -35,11 +35,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
-        # We need my branch of MyST-NB for compatibility
-        python -m pip install https://github.com/bryanwweber/MyST-NB/archive/refs/heads/fix_cell_output_renderer.zip
-        python -m pip install -e .[testing]
         # Output was generated with this version of docutils and Sphinx
         python -m pip install docutils==0.17.1 sphinx==4.3.0
+        # We need my branch of MyST-NB for compatibility
+        python -m pip install https://github.com/executablebooks/MyST-NB/archive/refs/heads/master.zip
+        python -m pip install -e .[testing]
 
     - name: Run pytest
       run: pytest --cov=myst_nb_bokeh --cov-report=xml --cov-report=term-missing
