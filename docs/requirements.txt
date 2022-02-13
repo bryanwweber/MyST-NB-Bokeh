@@ -1,1 +1,0 @@
-https://github.com/executablebooks/MyST-NB/archive/refs/heads/master.zip

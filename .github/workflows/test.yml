@@ -26,9 +26,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip setuptools wheel
         # Output was generated with this version of docutils and Sphinx
-        python -m pip install docutils==0.17.1 sphinx==4.3.0
-        # We need my branch of MyST-NB for compatibility
-        python -m pip install https://github.com/executablebooks/MyST-NB/archive/refs/heads/master.zip
+        python -m pip install docutils==0.16 sphinx==4.4.0
         python -m pip install -e .[testing]
 
     - name: Run pytest
