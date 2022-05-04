@@ -8,11 +8,19 @@ That's where this extension comes in 😀
 
 ## Installing
 
-MyST-NB-Bokeh can currently be installed only with `pip`. Python versions higher than 3.7 are supported.
+MyST-NB-Bokeh can be installed with `pip` or `conda`. Python versions higher than 3.7 are supported.
 
 ```shell
 python -m pip install myst-nb-bokeh
 ```
+
+or
+
+```shell
+conda install -c conda-forge myst-nb-bokeh
+```
+
+MyST-NB-Bokeh supports version 0.13.2 of MyST-NB.
 
 :::{toctree}
 ---

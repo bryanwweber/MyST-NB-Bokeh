@@ -4,7 +4,7 @@ from __future__ import annotations
 
 __author__ = """Bryan Weber"""
 __email__ = "bryan.w.weber@gmail.com"
-__version__ = "0.5.2.post1"
+__version__ = "0.5.3"
 
 import json
 from textwrap import dedent
