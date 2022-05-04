@@ -17,11 +17,11 @@
 # -- Project information -----------------------------------------------------
 
 project = "MyST-NB-Bokeh"
-copyright = "2021, Bryan Weber"
+copyright = "2022, Bryan Weber"
 author = "Bryan Weber"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+release = "0.5.3"
 
 
 # -- General configuration ---------------------------------------------------
