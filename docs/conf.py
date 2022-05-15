@@ -69,8 +69,8 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "jupyter_execute"]
 html_title = "MyST-NB Bokeh"
 html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "github_url": "https://github.com/bryanwweber/myst_nb_bokeh",
-    "repository_url": "https://github.com/bryanwweber/myst_nb_bokeh",
+    "github_url": "https://github.com/bryanwweber/myst-nb-bokeh",
+    "repository_url": "https://github.com/bryanwweber/myst-nb-bokeh",
     "repository_branch": "main",
     "use_repository_button": True,
     "use_issues_button": True,
