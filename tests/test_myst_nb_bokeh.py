@@ -4,7 +4,7 @@ import pytest
 from bokeh.plotting import figure
 from IPython.core.displaypub import DisplayPublisher
 from IPython.core.interactiveshell import InteractiveShell
-from myst_nb.nb_glue import GLUE_PREFIX as MYST_NB_GLUE_PREFIX
+from myst_nb.ext.glue import GLUE_PREFIX as MYST_NB_GLUE_PREFIX
 
 import myst_nb_bokeh
 
@@ -53,17 +53,12 @@ def test_glue_bokeh_no_display(mock_ipython):
     The main difference from a displayed figure is the mime_prefix in the metadata.
     """
     p = figure()
-    p.circle(range(1, 10), range(1, 10))
+    p.circle(list(range(1, 10)), list(range(1, 10)))
     myst_nb_bokeh.glue_bokeh("a", p)
     obtained = mock_ipython.publish_calls[0]
-    assert (
-        MYST_NB_GLUE_PREFIX + myst_nb_bokeh.JB_BOKEH_MIMETYPE in obtained["data"].keys()
-    )
+    assert MYST_NB_GLUE_PREFIX + myst_nb_bokeh.JB_BOKEH_MIMETYPE in obtained["data"].keys()
     scrapbook = obtained["metadata"]["scrapbook"]
-    assert "has_bokeh" in scrapbook and scrapbook["has_bokeh"]
-    assert (
-        "mime_prefix" in scrapbook and scrapbook["mime_prefix"] == MYST_NB_GLUE_PREFIX
-    )
+    assert "mime_prefix" in scrapbook and scrapbook["mime_prefix"] == MYST_NB_GLUE_PREFIX
     assert "name" in scrapbook and scrapbook["name"] == "a"
 
 
@@ -74,13 +69,12 @@ def test_glue_bokeh_display(mock_ipython):
     and the addition of an HTML and JavaScript output.
     """
     p = figure()
-    p.circle(range(1, 10), range(1, 10))
+    p.circle(list(range(1, 10)), list(range(1, 10)))
     myst_nb_bokeh.glue_bokeh("a", p, display=True)
     assert len(mock_ipython.publish_calls) == 3
     obtained_json = mock_ipython.publish_calls[0]
     assert myst_nb_bokeh.JB_BOKEH_MIMETYPE in obtained_json["data"].keys()
     scrapbook = obtained_json["metadata"]["scrapbook"]
-    assert "has_bokeh" in scrapbook and scrapbook["has_bokeh"]
     assert "mime_prefix" in scrapbook and not scrapbook["mime_prefix"]
     assert "name" in scrapbook and scrapbook["name"] == "a"
     obtained_html = mock_ipython.publish_calls[1]

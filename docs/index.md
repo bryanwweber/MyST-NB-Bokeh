@@ -1,4 +1,4 @@
-# Welcome to MyST-NB-Bokeh's documentation!
+# Welcome to MyST-NB-Bokeh's documentation
 
 This extension provides an interface to glue and paste [Bokeh](https://bokeh.org/) figures in the output of Jupyter Notebook cells when using the [MyST-NB](https://myst-nb.readthedocs.io/en/latest/index.html) library for Sphinx.
 
@@ -20,7 +20,7 @@ or
 conda install -c conda-forge myst-nb-bokeh
 ```
 
-MyST-NB-Bokeh supports version 0.13.2 of MyST-NB.
+MyST-NB-Bokeh supports version 0.17.1 of MyST-NB. Older versions have not been tested, but we guess that anything 0.14.0 and higher should work.
 
 :::{toctree}
 ---

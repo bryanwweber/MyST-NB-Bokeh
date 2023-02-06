@@ -80,7 +80,6 @@ def sphinx_run(sphinx_params, make_app, tempdir):
         "master_doc": os.path.splitext(sphinx_params["files"][0])[0],
         "exclude_patterns": ["_build"],
         "execution_show_tb": True,
-        "nb_render_plugin": "bokeh",
         "myst_enable_extensions": ["colon_fence"],
     }
     confoverrides.update(conf)
@@ -92,9 +91,7 @@ def sphinx_run(sphinx_params, make_app, tempdir):
     os.chdir(base_dir)
     (srcdir / "conf.py").write_text(
         "# conf overrides (passed directly to sphinx):\n"
-        + "\n".join(
-            ["# " + ll for ll in json.dumps(confoverrides, indent=2).splitlines()]
-        )
+        + "\n".join(["# " + ll for ll in json.dumps(confoverrides, indent=2).splitlines()])
         + "\n"
     )
 
@@ -116,7 +113,7 @@ def sphinx_run(sphinx_params, make_app, tempdir):
 class BokehHTMLChecker(LHTMLOutputChecker):
     """Check the HTML of a Notebook with Bokeh."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # noqa: D107
         super().__init__(*args, **kwargs)
         self.found_bokehjs = False
 
@@ -130,17 +127,11 @@ class BokehHTMLChecker(LHTMLOutputChecker):
             raise AssertionError(f"Expected tag: {want.tag}; Obtained tag: {got.tag}")
         if want.tag == "script" and want.text is not None and "Bokeh" in want.text:
             if got.text is None or "Bokeh" not in got.text:
-                raise AssertionError(
-                    f"Expected text: {want.text!r}; Obtained text: {got.text!r}"
-                )
+                raise AssertionError(f"Expected text: {want.text!r}; Obtained text: {got.text!r}")
         elif not self.text_compare(want.text, got.text, True):
-            raise AssertionError(
-                f"Expected text: {want.text!r}; Obtained text: {got.text!r}"
-            )
+            raise AssertionError(f"Expected text: {want.text!r}; Obtained text: {got.text!r}")
         if not self.text_compare(want.tail, got.tail, True):
-            raise AssertionError(
-                f"Expected tail: {want.tail!r}; Obtained tail: {got.tail!r}"
-            )
+            raise AssertionError(f"Expected tail: {want.tail!r}; Obtained tail: {got.tail!r}")
         if "any" not in want.attrib:
             want_keys = sorted(want.attrib.keys())
             got_keys = sorted(got.attrib.keys())
@@ -190,15 +181,11 @@ class BokehHTMLChecker(LHTMLOutputChecker):
             if got_path is None:
                 raise AssertionError(f"Obtained output did not match: {got.path}")
             if want_path.groups() != got_path.groups():
-                raise AssertionError(
-                    f"Expected value: {want.path}; Obtained value: {got.path}"
-                )
+                raise AssertionError(f"Expected value: {want.path}; Obtained value: {got.path}")
             return True
         else:
             if want.path != got.path:
-                raise AssertionError(
-                    f"Expected value: {want.path}; Obtained value: {got.path}"
-                )
+                raise AssertionError(f"Expected value: {want.path}; Obtained value: {got.path}")
             return False
 
 
