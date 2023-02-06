@@ -1,6 +1,9 @@
+[tool.black]
+line-length = 100
+
 [build-system]
-requires = ["setuptools>=46.4.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
 
 [tool.isort]
 profile = "black"
@@ -17,23 +20,76 @@ files = "src"
 
 [[tool.mypy.overrides]]
 module = [
-    "bokeh.embed",
-    "bokeh.resources",
     "IPython.display",
-    "myst_nb.nodes",
-    "myst_nb.render_outputs",
-    "myst_nb.nb_glue",
-    "docutils.nodes",
+    "myst_nb.core.render",
+    "myst_nb.ext.glue",
     "nbformat",
 ]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-markers = [
-    "sphinx_params",
-]
+markers = ["sphinx_params"]
 filterwarnings = [
     "ignore:'environmentfilter' is renamed",
     "ignore:'contextfilter' is renamed",
     "ignore:'contextfunction' is renamed",
 ]
+
+[tool.pdm]
+package-dir = "src"
+version = { source = "file", path = "src/myst_nb_bokeh/__init__.py" }
+[tool.pdm.dev-dependencies]
+dev = [
+    "pre-commit>=2.21.0",
+    "mypy>=0.991",
+    "flake8>=3.9.2",
+    "black>=23.1.0",
+    "flake8-docstrings>=1.7.0",
+]
+test = [
+    "lxml>=4.9.2",
+    "pytest>=7.2.1",
+    "pytest-cov>=4.0.0",
+    "pytest-regressions>=2.4.2",
+]
+docs = ["sphinx-book-theme>=0.3.3"]
+
+[project]
+name = "myst-nb-bokeh"
+description = "MyST-NB-Bokeh includes functions for gluing and pasting Bokeh figures in MyST documents."
+keywords = ["docutils", "sphinx", "bokeh"]
+readme = "README.md"
+authors = [{ name = "Bryan Weber", email = "bryan.w.weber@gmail.com" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Sphinx :: Extension",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Markup",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "IPython>=7.0",
+    "bokeh>=3.0.0",
+    "myst-nb>=0.13.2,<0.18",
+    "sphinx>=3.5,<6",
+]
+license = { text = "BSD-3-Clause" }
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/bryanwweber/myst-nb-bokeh"
+Documentation = "https://myst-nb-bokeh.readthedocs.io/en/latest/"
+Source = "https://github.com/bryanwweber/myst-nb-bokeh"
+Tracker = "https://github.com/bryanwweber/myst-nb-bokeh/issues"
+
+[project.entry-points."myst_nb.mime_renderers"]
+bokeh = "myst_nb_bokeh:BokehOutputRenderer"
