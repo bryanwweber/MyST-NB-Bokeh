@@ -52,7 +52,6 @@ test = [
     "pytest-cov>=4.0.0",
     "pytest-regressions>=2.4.2",
 ]
-docs = ["sphinx-book-theme>=0.3.3"]
 
 [project]
 name = "myst-nb-bokeh"
@@ -79,10 +78,13 @@ dependencies = [
     "IPython>=7.0",
     "bokeh>=3.0.0",
     "myst-nb>=0.13.2,<0.18",
-    "sphinx>=3.5,<6",
+    "sphinx>=4.5,<6",
 ]
 license = { text = "BSD-3-Clause" }
 dynamic = ["version"]
+
+[project.optional-dependencies]
+docs = ["sphinx-book-theme>=0.3.3", "sphinx>=4.5"]
 
 [project.urls]
 Homepage = "https://github.com/bryanwweber/myst-nb-bokeh"
