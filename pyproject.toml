@@ -61,7 +61,7 @@ keywords = ["docutils", "sphinx", "bokeh"]
 readme = "README.md"
 authors = [{ name = "Bryan Weber", email = "bryan.w.weber@gmail.com" }]
 classifiers = [
-    "Development Status :: 5 - Stable",
+    "Development Status :: 5 - Production/Stable",
     "Framework :: Sphinx :: Extension",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: BSD License",
