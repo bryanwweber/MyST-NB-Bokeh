@@ -77,7 +77,7 @@ requires-python = ">=3.9"
 dependencies = [
     "IPython>=7.0",
     "bokeh>=3.0.0",
-    "myst-nb>=0.13.2,<0.18",
+    "myst-nb>=0.17.1,<0.18",
     "sphinx>=4.5,<6",
 ]
 license = { text = "BSD-3-Clause" }
