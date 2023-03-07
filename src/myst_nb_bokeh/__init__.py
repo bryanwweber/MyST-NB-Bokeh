@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import json
-import uuid
 from textwrap import dedent
 from typing import TYPE_CHECKING
+from uuid import uuid4
 
 from bokeh.core.types import ID
 from bokeh.embed import components, json_item
@@ -110,7 +110,7 @@ class BokehOutputRenderer(MimeRenderPlugin):
             name = data.output_metadata["scrapbook"]["name"]
             # We postfix the name with a uuid to prevent issues where the same plot is embedded
             # multiple times in the same page.
-            id_name = f"{name}-{uuid.uuid4()}"
+            id_name = f"{name}-{uuid4()}"
             html_node = nodes.raw(text=f'<div id="{id_name}"></div>', format="html")
             js_text = dedent(
                 f"""\

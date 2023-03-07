@@ -10,9 +10,11 @@ import myst_nb_bokeh
 
 
 @pytest.mark.sphinx_params("bokeh.ipynb", conf={"jupyter_execute_notebooks": "force"})
-def test_bokeh_notebook(sphinx_run, file_regression, check_bokeh):
+def test_bokeh_notebook(sphinx_run, file_regression, check_bokeh, monkeypatch):
     """Test that Bokeh included in a Notebook has the JSON in the output HTML."""
-    sphinx_run.build()
+    with monkeypatch.context() as m:
+        m.setattr(myst_nb_bokeh, "uuid4", lambda: 1)
+        sphinx_run.build()
     assert sphinx_run.warnings() == ""
     name = sphinx_run.files[0][0]
     _path = sphinx_run.app.outdir / (name + ".html")
