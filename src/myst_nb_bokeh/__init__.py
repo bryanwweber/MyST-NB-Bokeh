@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import uuid
 from textwrap import dedent
 from typing import TYPE_CHECKING
 
@@ -82,10 +83,7 @@ def glue_bokeh(name: ID, variable: Model, display: bool = False) -> None:
     mime_prefix = "" if display else MYST_NB_GLUE_PREFIX
     metadata = {"scrapbook": dict(name=name, mime_prefix=mime_prefix, has_bokeh=True)}
     ipy_display(
-        {
-            mime_prefix
-            + JB_BOKEH_MIMETYPE: json.dumps(json_item(variable, name), separators=(",", ":"))
-        },
+        {mime_prefix + JB_BOKEH_MIMETYPE: json.dumps(json_item(variable), separators=(",", ":"))},
         raw=True,
         metadata=metadata,
     )
@@ -110,12 +108,15 @@ class BokehOutputRenderer(MimeRenderPlugin):
     ) -> None | list[nodes.Element]:
         if not inline and data.mime_type == JB_BOKEH_MIMETYPE:
             name = data.output_metadata["scrapbook"]["name"]
-            html_node = nodes.raw(text=f'<div id="{name}"></div>', format="html")
+            # We postfix the name with a uuid to prevent issues where the same plot is embedded
+            # multiple times in the same page.
+            id_name = f"{name}-{uuid.uuid4()}"
+            html_node = nodes.raw(text=f'<div id="{id_name}"></div>', format="html")
             js_text = dedent(
                 f"""\
                 <script type="text/javascript">
                 Bokeh.embed.embed_item(
-                    {data.content}
+                    {data.content}, "{id_name}"
                 );
                 </script>"""
             )
