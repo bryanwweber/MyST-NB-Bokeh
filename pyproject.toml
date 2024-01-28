@@ -27,7 +27,7 @@ test = { cmd = "pytest --cov=myst_nb_bokeh --cov-report=xml --cov-report=term-mi
 docs = { cmd = "sphinx-build -b html docs/ docs/_build" }
 
 [tool.pdm.dev-dependencies]
-dev = ["pre-commit>=3.6.0", "mypy>=1.8.0", "ruff>=0.1.14"]
+dev = ["pre-commit>=3.6.0", "ruff>=0.1.14", "mypy>=1.8.0"]
 test = [
     "lxml>=5.1.0",
     "pytest>=8.0.0",
