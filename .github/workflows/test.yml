@@ -44,21 +44,18 @@ jobs:
 
   publish:
     name: Publish to PyPI
-    needs: tests
+    needs: [tests, linting]
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-      - uses: pdm-project/setup-pdm@v3
-        name: Setup PDM
-        with:
-          python-version: "3.12"
-          cache: true
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v3
       - name: Build
         run: pdm build
       - name: Publish
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@v1.6.4
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
+        run: pdm publish --no-build
+        if: github.ref_type == 'tag'

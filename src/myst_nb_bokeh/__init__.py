@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 __author__ = """Bryan Weber"""
 __email__ = "bryan.w.weber@gmail.com"
-__version__ = "1.1.0"
+__version__ = "2024.01.0"
 
 LOGGER = getLogger(__name__)
 
