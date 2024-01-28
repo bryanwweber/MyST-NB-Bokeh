@@ -1,13 +1,44 @@
-[tool.black]
+[tool.ruff]
+extend-select = [
+    "F",   # pyflakes
+    "E",   # pycodestyle
+    "W",   # pycodestyle
+    "I",   # isort
+    "UP",  # pyupgrade
+    "ARG", # Unused arguments
+    "RUF", # Ruff options
+]
 line-length = 100
+extend-include = ["*.ipynb"]
+
+[tool.pdm]
+package-dir = "src"
+version = { source = "file", path = "src/myst_nb_bokeh/__init__.py" }
+
+[tool.pdm.scripts]
+ruff_check = { cmd = "ruff check src/ docs/ tests/" }
+ruff_format_check = { cmd = "ruff format --check src/ docs/ tests/" }
+mypy_check = { cmd = "mypy src/" }
+lint = { composite = ["ruff_check", "ruff_format_check", "mypy_check"] }
+ruff_fix = { cmd = "ruff check --fix-only src/ docs/ tests/" }
+ruff_format = { cmd = "ruff format src/ docs/ tests/" }
+format = { composite = ["ruff_fix", "ruff_format"] }
+test = { cmd = "pytest --cov=myst_nb_bokeh --cov-report=xml --cov-report=term-missing" }
+docs = { cmd = "sphinx-build -b html docs/ docs/_build" }
+
+[tool.pdm.dev-dependencies]
+dev = ["pre-commit>=3.6.0", "mypy>=1.8.0", "ruff>=0.1.14"]
+test = [
+    "lxml>=5.1.0",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-regressions>=2.5.0",
+]
+type-hints = ["types-docutils>=0.20.0.20240126"]
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
 build-backend = "pdm.pep517.api"
-
-[tool.isort]
-profile = "black"
-src_paths = ["src", "tests"]
 
 [tool.mypy]
 show_error_codes = true
@@ -35,24 +66,6 @@ filterwarnings = [
     "ignore:'contextfunction' is renamed",
 ]
 
-[tool.pdm]
-package-dir = "src"
-version = { source = "file", path = "src/myst_nb_bokeh/__init__.py" }
-[tool.pdm.dev-dependencies]
-dev = [
-    "pre-commit>=2.21.0",
-    "mypy>=0.991",
-    "flake8>=3.9.2",
-    "black>=23.1.0",
-    "flake8-docstrings>=1.7.0",
-]
-test = [
-    "lxml>=4.9.2",
-    "pytest>=7.2.1",
-    "pytest-cov>=4.0.0",
-    "pytest-regressions>=2.4.2",
-]
-
 [project]
 name = "myst-nb-bokeh"
 description = "MyST-NB-Bokeh includes functions for gluing and pasting Bokeh figures in MyST documents."
@@ -73,18 +86,18 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Text Processing :: Markup",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
-    "IPython>=7.0",
-    "bokeh>=3.0.0",
-    "myst-nb>=0.17.1,<0.18",
-    "sphinx>=4.5,<6",
+    "IPython>=8.20.0",
+    "bokeh>=3.3.4",
+    "myst-nb>=1.0.0",
+    "sphinx>=7.2.6",
 ]
 license = { text = "BSD-3-Clause" }
 dynamic = ["version"]
 
 [project.optional-dependencies]
-docs = ["sphinx-book-theme>=0.3.3", "sphinx>=4.5"]
+docs = ["sphinx-book-theme>=1.1.0"]
 
 [project.urls]
 Homepage = "https://github.com/bryanwweber/myst-nb-bokeh"

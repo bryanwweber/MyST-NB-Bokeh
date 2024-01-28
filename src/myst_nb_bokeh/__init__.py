@@ -33,7 +33,7 @@ LOGGER = getLogger(__name__)
 JB_BOKEH_MIMETYPE: str = "application/jupyter-book-bokeh-json"
 
 
-def setup(app: "Sphinx") -> dict[str, str | bool]:
+def setup(app: Sphinx) -> dict[str, str | bool]:
     """Set up the MyST-NB-Bokeh Sphinx extension.
 
     This function is automatically called by Sphinx, as long as this extension is
@@ -52,7 +52,7 @@ def setup(app: "Sphinx") -> dict[str, str | bool]:
     }
 
 
-def add_our_configuration(app: Sphinx, config: Config) -> None:
+def add_our_configuration(app: Sphinx, _: Config) -> None:
     """Add the configuration for MyST-NB-Bokeh to the Sphinx configuration.
 
     Designed to be connected to the ``'config-inited'``
@@ -62,7 +62,7 @@ def add_our_configuration(app: Sphinx, config: Config) -> None:
 
     :param app: The Sphinx application instance.
     :param config: The Sphinx configuration instance.
-    """  # noqa: E501
+    """
     overrides = list(app.config.nb_mime_priority_overrides[:])
     overrides.insert(0, ("html", JB_BOKEH_MIMETYPE, 0))
     app.config["nb_mime_priority_overrides"] = overrides
@@ -100,10 +100,10 @@ class BokehOutputRenderer(MimeRenderPlugin):
     See the `MyST-NB docs
     <https://myst-nb.readthedocs.io/en/latest/render/format_code_cells.html#render-output-cutomise>`__
     for further information.
-    """  # noqa: F501
+    """
 
     @staticmethod
-    def handle_mime(  # noqa: D102
+    def handle_mime(
         renderer: NbElementRenderer, data: MimeData, inline: int
     ) -> None | list[nodes.Element]:
         if not inline and data.mime_type == JB_BOKEH_MIMETYPE:
