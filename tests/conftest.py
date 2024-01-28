@@ -65,7 +65,7 @@ def sphinx_params(request):
 
 
 @pytest.fixture()
-def sphinx_run(sphinx_params, make_app, tempdir):
+def sphinx_run(sphinx_params, make_app, tmp_path):
     """Set up and run a Sphinx build, in a sandboxed folder.
 
     The `myst_nb_bokeh` extension is added by default,
@@ -85,9 +85,9 @@ def sphinx_run(sphinx_params, make_app, tempdir):
     confoverrides.update(conf)
 
     current_dir = os.getcwd()
-    base_dir = tempdir
+    base_dir = tmp_path
     srcdir = base_dir / "source"
-    srcdir.makedirs(exist_ok=True)
+    srcdir.mkdir(exist_ok=True)
     os.chdir(base_dir)
     (srcdir / "conf.py").write_text(
         "# conf overrides (passed directly to sphinx):\n"
@@ -98,7 +98,7 @@ def sphinx_run(sphinx_params, make_app, tempdir):
     for nb_file in sphinx_params["files"]:
         nb_path = TEST_FILE_DIR.joinpath(nb_file)
         assert nb_path.exists(), nb_path
-        (srcdir / nb_file).parent.makedirs(exist_ok=True)
+        (srcdir / nb_file).parent.mkdir(exist_ok=True)
         (srcdir / nb_file).write_text(nb_path.read_text(encoding="utf8"))
 
     nocolor()
@@ -113,7 +113,7 @@ def sphinx_run(sphinx_params, make_app, tempdir):
 class BokehHTMLChecker(LHTMLOutputChecker):
     """Check the HTML of a Notebook with Bokeh."""
 
-    def __init__(self, *args, **kwargs):  # noqa: D107
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.found_bokehjs = False
 

@@ -1,10 +1,7 @@
 {
     "editor.formatOnSave": true,
-    "python.formatting.provider": "black",
     "cSpell.words": [
         "bokeh"
     ],
-    "python.linting.flake8Enabled": true,
-    "python.linting.mypyEnabled": true,
     "python.testing.pytestEnabled": true
 }

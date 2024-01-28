@@ -70,6 +70,7 @@ html_theme_options = {
     "use_edit_page_button": True,
     "path_to_docs": "docs/",
     "show_navbar_depth": 2,
+    "navigation_with_keys": False,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
