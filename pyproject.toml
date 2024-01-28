@@ -11,9 +11,9 @@ extend-select = [
 line-length = 100
 extend-include = ["*.ipynb"]
 
-[tool.pdm]
-package-dir = "src"
-version = { source = "file", path = "src/myst_nb_bokeh/__init__.py" }
+[tool.pdm.version]
+source = "file"
+path = "src/myst_nb_bokeh/__init__.py"
 
 [tool.pdm.scripts]
 ruff_check = { cmd = "ruff check src/ docs/ tests/" }
@@ -37,8 +37,8 @@ test = [
 type-hints = ["types-docutils>=0.20.0.20240126"]
 
 [build-system]
-requires = ["pdm-pep517>=1.0.0"]
-build-backend = "pdm.pep517.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
 [tool.mypy]
 show_error_codes = true
