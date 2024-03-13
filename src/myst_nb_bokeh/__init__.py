@@ -1,4 +1,5 @@
 """MyST-NB-Bokeh enables gluing and pasting Bokeh plots when using the MyST-NB Sphinx extension."""
+
 from __future__ import annotations
 
 import json
