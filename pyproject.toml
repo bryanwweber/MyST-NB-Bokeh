@@ -1,4 +1,8 @@
 [tool.ruff]
+line-length = 100
+extend-include = ["*.ipynb"]
+
+[tool.ruff.lint]
 extend-select = [
     "F",   # pyflakes
     "E",   # pycodestyle
@@ -8,8 +12,6 @@ extend-select = [
     "ARG", # Unused arguments
     "RUF", # Ruff options
 ]
-line-length = 100
-extend-include = ["*.ipynb"]
 
 [tool.pdm.version]
 source = "file"
