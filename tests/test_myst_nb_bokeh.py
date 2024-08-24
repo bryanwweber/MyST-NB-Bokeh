@@ -1,11 +1,12 @@
 """Tests for `myst_nb_bokeh` package."""
 
-import myst_nb_bokeh
 import pytest
 from bokeh.plotting import figure
 from IPython.core.displaypub import DisplayPublisher
 from IPython.core.interactiveshell import InteractiveShell
 from myst_nb.ext.glue import GLUE_PREFIX as MYST_NB_GLUE_PREFIX
+
+import myst_nb_bokeh
 
 
 @pytest.mark.sphinx_params("bokeh.ipynb", conf={"jupyter_execute_notebooks": "force"})
