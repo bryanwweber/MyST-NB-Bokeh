@@ -36,7 +36,7 @@ repos:
             tests/.*\.py
           )$
   - repo: https://github.com/pdm-project/pdm
-    rev: 2.24.2 # a PDM release exposing the hook
+    rev: 2.25.2 # a PDM release exposing the hook
     hooks:
       - id: pdm-lock-check
 
