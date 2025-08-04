@@ -17,7 +17,7 @@ repos:
       - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.12.5
+    rev: v0.12.7
     hooks:
       # Run the linter.
       - id: ruff
@@ -26,7 +26,7 @@ repos:
       - id: ruff-format
         types_or: [python, pyi, jupyter]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.17.0
+    rev: v1.17.1
     hooks:
       - id: mypy
         args: ["--install-types", "--non-interactive"]
@@ -36,7 +36,7 @@ repos:
             tests/.*\.py
           )$
   - repo: https://github.com/pdm-project/pdm
-    rev: 2.25.4 # a PDM release exposing the hook
+    rev: 2.25.5 # a PDM release exposing the hook
     hooks:
       - id: pdm-lock-check
 
