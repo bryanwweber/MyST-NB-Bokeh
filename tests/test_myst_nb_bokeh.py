@@ -58,7 +58,7 @@ def test_glue_bokeh_no_display(mock_ipython):
     p.circle(list(range(1, 10)), list(range(1, 10)))
     myst_nb_bokeh.glue_bokeh("a", p)
     obtained = mock_ipython.publish_calls[0]
-    assert MYST_NB_GLUE_PREFIX + myst_nb_bokeh.JB_BOKEH_MIMETYPE in obtained["data"].keys()
+    assert MYST_NB_GLUE_PREFIX + myst_nb_bokeh.JB_BOKEH_MIMETYPE in obtained["data"]
     scrapbook = obtained["metadata"]["scrapbook"]
     assert "mime_prefix" in scrapbook and scrapbook["mime_prefix"] == MYST_NB_GLUE_PREFIX
     assert "name" in scrapbook and scrapbook["name"] == "a"
@@ -75,11 +75,11 @@ def test_glue_bokeh_display(mock_ipython):
     myst_nb_bokeh.glue_bokeh("a", p, display=True)
     assert len(mock_ipython.publish_calls) == 3
     obtained_json = mock_ipython.publish_calls[0]
-    assert myst_nb_bokeh.JB_BOKEH_MIMETYPE in obtained_json["data"].keys()
+    assert myst_nb_bokeh.JB_BOKEH_MIMETYPE in obtained_json["data"]
     scrapbook = obtained_json["metadata"]["scrapbook"]
     assert "mime_prefix" in scrapbook and not scrapbook["mime_prefix"]
     assert "name" in scrapbook and scrapbook["name"] == "a"
     obtained_html = mock_ipython.publish_calls[1]
-    assert "text/html" in obtained_html["data"].keys()
+    assert "text/html" in obtained_html["data"]
     obtained_js = mock_ipython.publish_calls[2]
-    assert "application/javascript" in obtained_js["data"].keys()
+    assert "application/javascript" in obtained_js["data"]

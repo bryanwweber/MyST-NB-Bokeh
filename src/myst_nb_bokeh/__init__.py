@@ -82,7 +82,7 @@ def glue_bokeh(name: ID, variable: Model, display: bool = False) -> None:
                     Useful for sanity checking the output. ``False`` by default.
     """
     mime_prefix = "" if display else MYST_NB_GLUE_PREFIX
-    metadata = {"scrapbook": dict(name=name, mime_prefix=mime_prefix, has_bokeh=True)}
+    metadata = {"scrapbook": {"name": name, "mime_prefix": mime_prefix, "has_bokeh": True}}
     ipy_display(
         {mime_prefix + JB_BOKEH_MIMETYPE: json.dumps(json_item(variable), separators=(",", ":"))},
         raw=True,
@@ -106,7 +106,7 @@ class BokehOutputRenderer(MimeRenderPlugin):
     @staticmethod
     def handle_mime(
         renderer: NbElementRenderer, data: MimeData, inline: int
-    ) -> None | list[nodes.Element]:
+    ) -> list[nodes.Element] | None:
         if not inline and data.mime_type == JB_BOKEH_MIMETYPE:
             name = data.output_metadata["scrapbook"]["name"]
             # We postfix the name with a uuid to prevent issues where the same plot is embedded
